@@ -41,7 +41,7 @@ impl ConstraintSynthesizer<Fq> for PedersenComCircuit {
         let _cs_no = cs.num_constraints();
         // step 1. Allocate Parameters for perdersen commitment
         let param_var =
-            PedersenParamVar::new_witness(ark_relations::ns!(cs, "gadget_parameters"), || {
+            PedersenParamVar::new_input(ark_relations::ns!(cs, "gadget_parameters"), || {
                 Ok(&self.param)
             })
             .unwrap();

@@ -1,15 +1,15 @@
 mod groth_api;
+mod marlin;
 mod pedersen;
 mod r1cs;
-mod marlin;
 
 use ark_crypto_primitives::commitment::pedersen::Randomness;
 use ark_ed_on_bls12_381::*;
 use ark_ff::UniformRand;
 use groth_api::*;
+use marlin::*;
 use pedersen::*;
 use r1cs::*;
-use marlin::*;
 
 fn main() {
     let mut rng = rand::thread_rng();
@@ -28,9 +28,9 @@ fn main() {
 
     sanity_check();
 
-    // let zk_param = groth_param_gen(param);
-    // let proof = groth_proof_gen(&zk_param, circuit, &[0u8; 32]);
-    // assert!(groth_verify(&zk_param, &proof, &commit));
+    let zk_param = groth_param_gen(param);
+    let proof = groth_proof_gen(&zk_param, circuit, &[0u8; 32]);
+    assert!(groth_verify(&zk_param, &proof, &commit));
 
     marlin_test();
 }

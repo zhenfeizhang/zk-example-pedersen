@@ -1,16 +1,14 @@
 use crate::pedersen::*;
-use algebra::ed_on_bls12_381::*;
-use crypto_primitives::commitment::pedersen::constraints::CommGadget;
-use crypto_primitives::CommitmentGadget;
-use r1cs_core::ConstraintSynthesizer;
-use r1cs_core::ConstraintSystemRef;
-use r1cs_core::SynthesisError;
-use r1cs_std::alloc::AllocVar;
-use r1cs_std::ed_on_bls12_381::EdwardsVar;
-use r1cs_std::eq::EqGadget;
-use r1cs_std::fields::fp::FpVar;
-use r1cs_std::groups::curves::twisted_edwards::AffineVar;
-use r1cs_std::uint8::UInt8;
+use ark_crypto_primitives::commitment::pedersen::constraints::CommGadget;
+use ark_crypto_primitives::CommitmentGadget;
+use ark_ed_on_bls12_381::constraints::EdwardsVar;
+use ark_ed_on_bls12_381::*;
+use ark_r1cs_std::alloc::AllocVar;
+use ark_r1cs_std::eq::EqGadget;
+use ark_r1cs_std::fields::fp::FpVar;
+use ark_r1cs_std::groups::curves::twisted_edwards::AffineVar;
+use ark_r1cs_std::uint8::UInt8;
+use ark_relations::r1cs::{ConstraintSynthesizer, ConstraintSystemRef, SynthesisError};
 
 // alias for R1CS gadgets of pedersen commitment scheme
 pub type PedersenComSchemeVar = CommGadget<JubJub, EdwardsVar, Window>;
@@ -40,7 +38,7 @@ impl ConstraintSynthesizer<Fq> for PedersenComCircuit {
         let _cs_no = cs.num_constraints();
         // step 1. Allocate Parameters for perdersen commitment
         let param_var =
-            PedersenParamVar::new_witness(r1cs_core::ns!(cs, "gadget_parameters"), || {
+            PedersenParamVar::new_witness(ark_relations::ns!(cs, "gadget_parameters"), || {
                 Ok(&self.param)
             })
             .unwrap();
@@ -61,7 +59,7 @@ impl ConstraintSynthesizer<Fq> for PedersenComCircuit {
 
         // step 3. Allocate the opening
         let open_var =
-            PedersenRandomnessVar::new_witness(r1cs_core::ns!(cs, "gadget_randomness"), || {
+            PedersenRandomnessVar::new_witness(ark_relations::ns!(cs, "gadget_randomness"), || {
                 Ok(&self.open)
             })
             .unwrap();
@@ -82,7 +80,7 @@ impl ConstraintSynthesizer<Fq> for PedersenComCircuit {
         // circuit to compare the commited value with supplied value
 
         let commitment_var2 =
-            PedersenCommitmentVar::new_input(r1cs_core::ns!(cs, "gadget_commitment"), || {
+            PedersenCommitmentVar::new_input(ark_relations::ns!(cs, "gadget_commitment"), || {
                 Ok(self.commit)
             })
             .unwrap();

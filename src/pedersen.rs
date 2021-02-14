@@ -1,15 +1,14 @@
-use algebra::ed_on_bls12_381;
-use crypto_primitives::commitment::pedersen;
-use crypto_primitives::commitment::pedersen::Commitment;
-use crypto_primitives::commitment::pedersen::Randomness;
-use crypto_primitives::CommitmentScheme;
+use ark_crypto_primitives::commitment::pedersen;
+use ark_crypto_primitives::commitment::pedersen::Commitment;
+use ark_crypto_primitives::commitment::pedersen::Randomness;
+use ark_crypto_primitives::CommitmentScheme;
 use rand::SeedableRng;
 use rand_chacha::ChaCha20Rng;
 
 //=======================
 // curves: JubJub and BLS
 //=======================
-pub type JubJub = ed_on_bls12_381::EdwardsProjective;
+pub type JubJub = ark_ed_on_bls12_381::EdwardsProjective;
 
 //=======================
 // pedersen hash and related defintions

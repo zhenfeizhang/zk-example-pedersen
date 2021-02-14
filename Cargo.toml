@@ -8,15 +8,16 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-algebra = { git = "https://github.com/zhenfeizhang/zexe/", features = ["asm", "bls12_381", "ed_on_bls12_381"]}
-algebra-core = { git = "https://github.com/zhenfeizhang/zexe/", features = ["llvm_asm"]}
-crypto-primitives = { git = "https://github.com/zhenfeizhang/zexe/" }
-
 rand_chacha = "0.2.2"
 rand = "0.7.3"
 rand_xorshift = { version = "0.2" }
 
-groth16 = { git = "https://github.com/zhenfeizhang/zexe/"}#, optional = true, default-features = false }
-
-r1cs-core = { git = "https://github.com/zhenfeizhang/zexe/", features = ["std"] }
-r1cs-std = { git = "https://github.com/zhenfeizhang/zexe/", features = ["ed_on_bls12_381"] }
+ark-groth16 = { version = "0.1.0", git = "https://github.com/arkworks-rs/groth16", default-features = false, features = [ "r1cs" ] }
+ark-r1cs-std = { version = "0.1.0", git = "https://github.com/arkworks-rs/r1cs-std", default-features = false }
+ark-relations = { git = "https://github.com/arkworks-rs/snark", default-features = false }
+ark-ed-on-bls12-381 = { version = "0.1.0", git = "https://github.com/arkworks-rs/curves/", default-features = false, features = [ "r1cs" ] }
+ark-bls12-381 = { version = "0.1.0", git = "https://github.com/arkworks-rs/curves/", default-features = false, features = [ "curve" ] }
+# ark-algebra = { git = "https://github.com/zhenfeizhang/zexe/", features = ["asm", "bls12_381",  default-features = false, "ed_on_bls12_381"]}
+# algebra-core = { git = "https://github.com/zhenfeizhang/zexe/", features = ["llvm_asm"]}
+ark-crypto-primitives = { version = "0.1.0", git = "https://github.com/arkworks-rs/crypto-primitives.git", branch = "main", features = [ "r1cs" ] }
+ark-ff = { git = "https://github.com/arkworks-rs/algebra", default-features = false }

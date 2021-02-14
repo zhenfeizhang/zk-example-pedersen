@@ -1,12 +1,14 @@
 use crate::pedersen::*;
 use crate::r1cs::*;
-use algebra::ed_on_bls12_381::Fq;
-use algebra::ed_on_bls12_381::Fr;
-use algebra::UniformRand;
-use crypto_primitives::commitment::pedersen::Randomness;
-use groth16::*;
-use r1cs_core::ConstraintSynthesizer;
-use r1cs_core::ConstraintSystem;
+use ark_bls12_381::Bls12_381;
+use ark_crypto_primitives::commitment::pedersen::Randomness;
+use ark_crypto_primitives::SNARK;
+use ark_ed_on_bls12_381::Fq;
+use ark_ed_on_bls12_381::Fr;
+use ark_ff::UniformRand;
+use ark_groth16::*;
+use ark_relations::r1cs::ConstraintSynthesizer;
+use ark_relations::r1cs::ConstraintSystem;
 use rand::SeedableRng;
 use rand_chacha::ChaCha20Rng;
 
@@ -49,9 +51,7 @@ pub fn sanity_check() -> bool {
     res
 }
 
-pub fn param_gen(
-    param: PedersenParam,
-) -> Parameters<algebra::bls12::Bls12<algebra::bls12_381::Parameters>> {
+pub fn groth_param_gen(param: PedersenParam) -> <Groth16<Bls12_381> as SNARK<Fq>>::ProvingKey {
     let mut rng = rand::thread_rng();
     let len = 256;
     let input = vec![0u8; len];
@@ -64,21 +64,21 @@ pub fn param_gen(
         open,
         commit,
     };
-    generate_random_parameters::<algebra::Bls12_381, _, _>(circuit, &mut rng).unwrap()
+    generate_random_parameters::<Bls12_381, _, _>(circuit, &mut rng).unwrap()
 }
 
-pub fn proof_gen(
-    param: &Parameters<algebra::bls12::Bls12<algebra::bls12_381::Parameters>>,
+pub fn groth_proof_gen(
+    param: &<Groth16<Bls12_381> as SNARK<Fq>>::ProvingKey,
     circuit: PedersenComCircuit,
     seed: &[u8; 32],
-) -> Proof<algebra::bls12::Bls12<algebra::bls12_381::Parameters>> {
+) -> <Groth16<Bls12_381> as SNARK<Fq>>::Proof {
     let mut rng = ChaCha20Rng::from_seed(*seed);
     create_random_proof(circuit, &param, &mut rng).unwrap()
 }
 
-pub fn verify(
-    param: &Parameters<algebra::bls12::Bls12<algebra::bls12_381::Parameters>>,
-    proof: &Proof<algebra::bls12::Bls12<algebra::bls12_381::Parameters>>,
+pub fn groth_verify(
+    param: &<Groth16<Bls12_381> as SNARK<Fq>>::ProvingKey,
+    proof: &<Groth16<Bls12_381> as SNARK<Fq>>::Proof,
     commit: &PedersenCommitment,
 ) -> bool {
     let pvk = prepare_verifying_key(&param.vk);

@@ -3,9 +3,9 @@ mod pedersen;
 mod r1cs;
 
 use crate::api::*;
-use algebra::ed_on_bls12_381::*;
-use algebra::UniformRand;
-use crypto_primitives::commitment::pedersen::Randomness;
+use ark_crypto_primitives::commitment::pedersen::Randomness;
+use ark_ed_on_bls12_381::*;
+use ark_ff::UniformRand;
 use pedersen::*;
 use r1cs::*;
 
@@ -26,7 +26,7 @@ fn main() {
 
     sanity_check();
 
-    let zk_param = param_gen(param);
-    let proof = proof_gen(&zk_param, circuit, &[0u8; 32]);
-    assert!(verify(&zk_param, &proof, &commit))
+    let zk_param = groth_param_gen(param);
+    let proof = groth_proof_gen(&zk_param, circuit, &[0u8; 32]);
+    assert!(groth_verify(&zk_param, &proof, &commit))
 }

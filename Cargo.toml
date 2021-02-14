@@ -17,7 +17,9 @@ ark-r1cs-std = { version = "0.1.0", git = "https://github.com/arkworks-rs/r1cs-s
 ark-relations = { git = "https://github.com/arkworks-rs/snark", default-features = false }
 ark-ed-on-bls12-381 = { version = "0.1.0", git = "https://github.com/arkworks-rs/curves/", default-features = false, features = [ "r1cs" ] }
 ark-bls12-381 = { version = "0.1.0", git = "https://github.com/arkworks-rs/curves/", default-features = false, features = [ "curve" ] }
-# ark-algebra = { git = "https://github.com/zhenfeizhang/zexe/", features = ["asm", "bls12_381",  default-features = false, "ed_on_bls12_381"]}
-# algebra-core = { git = "https://github.com/zhenfeizhang/zexe/", features = ["llvm_asm"]}
 ark-crypto-primitives = { version = "0.1.0", git = "https://github.com/arkworks-rs/crypto-primitives.git", branch = "main", features = [ "r1cs" ] }
-ark-ff = { git = "https://github.com/arkworks-rs/algebra", default-features = false }
+ark-ff = { git = "https://github.com/arkworks-rs/algebra", default-features = false, features = [ "asm" ] }
+ark-marlin = { version = "0.1.0", git = "https://github.com/arkworks-rs/marlin", default-features = false }
+ark-poly = { git = "https://github.com/arkworks-rs/algebra", default-features = false }
+ark-poly-commit = { git = "https://github.com/arkworks-rs/poly-commit", default-features = false }
+blake2 = { version = "0.9", default-features = false }

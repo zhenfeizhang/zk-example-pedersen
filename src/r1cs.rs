@@ -103,7 +103,7 @@ impl ConstraintSynthesizer<Fq> for PedersenComCircuit {
 pub fn sanity_check() -> bool {
     let mut rng = rand::thread_rng();
     let len = 256;
-    let param = setup(&[0u8; 32]);
+    let param = pedersen_setup(&[0u8; 32]);
     let input = vec![0u8; len];
     let open = Randomness::<JubJub>(Fr::rand(&mut rng));
     let commit = pedersen_commit(&input, &param, &open);

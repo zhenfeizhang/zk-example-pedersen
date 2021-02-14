@@ -9,11 +9,12 @@ use ark_ff::UniformRand;
 use groth_api::*;
 use pedersen::*;
 use r1cs::*;
+use marlin::*;
 
 fn main() {
     let mut rng = rand::thread_rng();
     let len = 256;
-    let param = setup(&[0u8; 32]);
+    let param = pedersen_setup(&[0u8; 32]);
     let input = vec![0u8; len];
     let open = Randomness::<JubJub>(Fr::rand(&mut rng));
     let commit = pedersen_commit(&input, &param, &open);
@@ -27,7 +28,9 @@ fn main() {
 
     sanity_check();
 
-    let zk_param = groth_param_gen(param);
-    let proof = groth_proof_gen(&zk_param, circuit, &[0u8; 32]);
-    assert!(groth_verify(&zk_param, &proof, &commit))
+    // let zk_param = groth_param_gen(param);
+    // let proof = groth_proof_gen(&zk_param, circuit, &[0u8; 32]);
+    // assert!(groth_verify(&zk_param, &proof, &commit));
+
+    marlin_test();
 }

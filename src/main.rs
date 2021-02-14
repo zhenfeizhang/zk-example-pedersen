@@ -1,11 +1,12 @@
-mod api;
+mod groth_api;
 mod pedersen;
 mod r1cs;
+mod marlin;
 
-use crate::api::*;
 use ark_crypto_primitives::commitment::pedersen::Randomness;
 use ark_ed_on_bls12_381::*;
 use ark_ff::UniformRand;
+use groth_api::*;
 use pedersen::*;
 use r1cs::*;
 

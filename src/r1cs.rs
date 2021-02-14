@@ -1,13 +1,16 @@
 use crate::pedersen::*;
 use ark_crypto_primitives::commitment::pedersen::constraints::CommGadget;
+use ark_crypto_primitives::commitment::pedersen::Randomness;
 use ark_crypto_primitives::CommitmentGadget;
 use ark_ed_on_bls12_381::constraints::EdwardsVar;
 use ark_ed_on_bls12_381::*;
+use ark_ff::UniformRand;
 use ark_r1cs_std::alloc::AllocVar;
 use ark_r1cs_std::eq::EqGadget;
 use ark_r1cs_std::fields::fp::FpVar;
 use ark_r1cs_std::groups::curves::twisted_edwards::AffineVar;
 use ark_r1cs_std::uint8::UInt8;
+use ark_relations::r1cs::ConstraintSystem;
 use ark_relations::r1cs::{ConstraintSynthesizer, ConstraintSystemRef, SynthesisError};
 
 // alias for R1CS gadgets of pedersen commitment scheme
@@ -94,4 +97,44 @@ impl ConstraintSynthesizer<Fq> for PedersenComCircuit {
         println!("total cs for Commitment: {}", cs.num_constraints());
         Ok(())
     }
+}
+
+#[allow(dead_code)]
+pub fn sanity_check() -> bool {
+    let mut rng = rand::thread_rng();
+    let len = 256;
+    let param = setup(&[0u8; 32]);
+    let input = vec![0u8; len];
+    let open = Randomness::<JubJub>(Fr::rand(&mut rng));
+    let commit = pedersen_commit(&input, &param, &open);
+
+    let circuit = PedersenComCircuit {
+        param,
+        input,
+        open,
+        commit,
+    };
+    // sanity checks
+    let sanity_cs = ConstraintSystem::<Fq>::new_ref();
+    circuit.generate_constraints(sanity_cs.clone()).unwrap();
+    let res = sanity_cs.is_satisfied().unwrap();
+
+    #[cfg(debug_assertions)]
+    {
+        println!("are the constraints satisfied?: {}\n", res);
+        println!(
+            "number of constraint {} for data size: {}\n",
+            sanity_cs.num_constraints(),
+            len
+        );
+    }
+    if !res {
+        println!(
+            "{:?} {} {:#?}",
+            sanity_cs.constraint_names(),
+            sanity_cs.num_constraints(),
+            sanity_cs.which_is_unsatisfied().unwrap()
+        );
+    }
+    res
 }

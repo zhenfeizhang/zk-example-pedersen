@@ -31,6 +31,7 @@ pub type PedersenCommitment = <PedersenComScheme as CommitmentScheme>::Output;
 pub type PedersenParam = <PedersenComScheme as CommitmentScheme>::Parameters;
 pub type PedersenRandomness = Randomness<JubJub>;
 
+#[allow(dead_code)]
 pub fn setup(seed: &[u8; 32]) -> PedersenParam {
     let mut rng = ChaCha20Rng::from_seed(*seed);
     PedersenComScheme::setup(&mut rng).unwrap()

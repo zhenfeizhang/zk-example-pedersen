@@ -9,7 +9,7 @@ fn main() {
 	// input is a 256 bytes of vector
 	let input = [
 		"This is the input blob we want to commit to...".as_ref(),
-		[08; 210].as_ref(),
+		[0u8; 210].as_ref(),
 	]
 	.concat();
 	let open = Randomness::<JubJub>(Fr::rand(&mut rng));

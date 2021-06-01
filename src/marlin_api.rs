@@ -66,7 +66,7 @@ pub fn marlin_param_gen(
 			_index.max_degree()
 		);
 	}
-	let (pk, vk) = MarlinInst::index(&srs, circuit.clone()).unwrap();
+	let (pk, vk) = MarlinInst::index(&srs, circuit).unwrap();
 
 	(pk, vk)
 }

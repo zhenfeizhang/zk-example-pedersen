@@ -1,4 +1,6 @@
 #!/bin/sh
 
 cargo clippy
-cargo run --release
+cargo run --example groth16 --release
+cargo run --example marlin --release
+
